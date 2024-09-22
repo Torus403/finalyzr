@@ -66,23 +66,23 @@ def reset_password(session: SessionDep, body: NewPassword) -> Message:
     return Message(message="Password updated successfully")
 
 
-# Superuser Endpoints
-superuser_router = APIRouter(dependencies=[Depends(get_current_superuser)])
-
-
-@superuser_router.post(
-    "/recover-password/{email}",
-)
-def recover_password_html_content(email: str, session: SessionDep) -> Token:
-    """
-    HTML Content for Password Recovery
-    """
-    user = user_crud.get_user_by_email(session=session, email=email)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="The user with this username does not exist in the system.",
-        )
-
-    password_reset_token = generate_password_reset_token(email=email)
-    return Token(access_token=password_reset_token)
+# # Superuser Endpoints
+# superuser_router = APIRouter(dependencies=[Depends(get_current_superuser)])
+#
+#
+# @superuser_router.post(
+#     "/recover-password/{email}",
+# )
+# def recover_password_html_content(email: str, session: SessionDep) -> Token:
+#     """
+#     HTML Content for Password Recovery
+#     """
+#     user = user_crud.get_user_by_email(session=session, email=email)
+#     if not user:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail="The user with this username does not exist in the system.",
+#         )
+#
+#     password_reset_token = generate_password_reset_token(email=email)
+#     return Token(access_token=password_reset_token)
