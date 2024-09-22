@@ -11,7 +11,9 @@ from app.core.db import Base
 class Portfolio(Base):
     __tablename__ = "portfolios"
 
-    id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    id = Column(
+        CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True
+    )
     name = Column(String(255), index=True, nullable=False)
     description = Column(String(500), nullable=True)
     owner_id = Column(CHAR(36), ForeignKey("users.id"), nullable=False)

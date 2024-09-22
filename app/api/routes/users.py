@@ -51,16 +51,19 @@ def read_user_me(current_user: CurrentUser) -> Any:
 
 @router.patch("/me/password", response_model=Message)
 def update_password_me(
-        *, session: SessionDep, body: UpdatePassword, current_user: CurrentUser
+    *, session: SessionDep, body: UpdatePassword, current_user: CurrentUser
 ) -> Any:
     """
     Update own password.
     """
     if not verify_password(body.current_password, current_user.hashed_password):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect password")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect password"
+        )
     if body.current_password == body.new_password:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="New password cannot be the same as the current one"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="New password cannot be the same as the current one",
         )
 
     hashed_password = hash_password(body.new_password)
@@ -85,7 +88,8 @@ def update_user_me(
         )
         if existing_user and existing_user.id != current_user.id:
             raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT, detail="User with this email already exists"
+                status_code=status.HTTP_409_CONFLICT,
+                detail="User with this email already exists",
             )
 
     user_data = user_in.model_dump(exclude_unset=True)
@@ -102,7 +106,8 @@ def delete_user_me(session: SessionDep, current_user: CurrentUser) -> Any:
     """
     if current_user.is_superuser:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Super users are not allowed to delete themselves"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Super users are not allowed to delete themselves",
         )
 
     user_crud.delete_user(session=session, user=current_user)

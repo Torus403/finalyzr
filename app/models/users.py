@@ -10,9 +10,13 @@ from app.core.db import Base
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(CHAR(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
+    id = Column(
+        CHAR(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4())
+    )
     email = Column(String(255), unique=True, index=True, nullable=False)
     password = Column(String(255), nullable=False)
     is_superuser = Column(Boolean, nullable=False, default=False)
 
-    portfolios = relationship("Portfolio", back_populates="owner", cascade="all, delete-orphan")
+    portfolios = relationship(
+        "Portfolio", back_populates="owner", cascade="all, delete-orphan"
+    )

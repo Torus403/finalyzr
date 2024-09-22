@@ -13,7 +13,7 @@ from app.schemas.login import Message, NewPassword, Token
 from app.utils.login import (
     generate_password_reset_token,
     verify_password_reset_token,
-    authenticate_user
+    authenticate_user,
 )
 
 router = APIRouter()
