@@ -7,7 +7,7 @@ from app.core.config import settings
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Welcome to Finalyzr's API documentation! Here you will be able to discover all the ways you can "
-                "interact with the Finalyzr API.",
+    "interact with the Finalyzr API.",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
 
