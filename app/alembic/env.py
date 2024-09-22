@@ -24,6 +24,7 @@ if config.config_file_name is not None:
 
 from app.core.db import Base
 from app.models.users import User
+from app.models.portfolios import Portfolio
 
 target_metadata = Base.metadata
 

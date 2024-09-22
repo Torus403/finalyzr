@@ -1,6 +1,9 @@
 import uuid
+
 from sqlalchemy import Column, String, Boolean
 from sqlalchemy.dialects.mysql import CHAR
+from sqlalchemy.orm import relationship
+
 from app.core.db import Base
 
 
@@ -11,3 +14,5 @@ class User(Base):
     email = Column(String(255), unique=True, index=True, nullable=False)
     password = Column(String(255), nullable=False)
     is_superuser = Column(Boolean, nullable=False, default=False)
+
+    portfolios = relationship("Portfolio", back_populates="owner", cascade="all, delete-orphan")
