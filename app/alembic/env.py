@@ -26,6 +26,7 @@ from app.core.db import Base
 from app.models.users import User
 from app.models.portfolios import Portfolio
 from app.models.trades import Trade
+from app.models.cash_actions import CashAction
 
 target_metadata = Base.metadata
 
