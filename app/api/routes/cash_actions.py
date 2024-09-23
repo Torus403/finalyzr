@@ -12,7 +12,7 @@ from app.crud.cash_actions import (
     get_cash_actions_by_portfolio,
     create_cash_action,
     update_cash_action,
-    delete_cash_action
+    delete_cash_action,
 )
 
 
@@ -29,7 +29,7 @@ def create_cash_action_endpoint(
     session: SessionDep,
     current_user: CurrentUser,
     portfolio_id: uuid.UUID = Path(...),
-    cash_action_in: CashActionCreate
+    cash_action_in: CashActionCreate,
 ):
     """
     Create a new cash action within a portfolio.
@@ -44,7 +44,9 @@ def create_cash_action_endpoint(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to add cash actions to this portfolio",
         )
-    cash_action = create_cash_action(session=session, cash_action_in=cash_action_in, portfolio_id=portfolio_id)
+    cash_action = create_cash_action(
+        session=session, cash_action_in=cash_action_in, portfolio_id=portfolio_id
+    )
     return cash_action
 
 
@@ -106,7 +108,7 @@ def read_cash_action_by_id(
     if cash_action.portfolio_id != portfolio_id:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Cash action not found in the specified portfolio"
+            detail="Cash action not found in the specified portfolio",
         )
 
     return cash_action
@@ -143,10 +145,12 @@ def update_cash_action_endpoint(
     if cash_action.portfolio_id != portfolio_id:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Cash action not found in the specified portfolio"
+            detail="Cash action not found in the specified portfolio",
         )
 
-    updated_cash_action = update_cash_action(session=session, cash_action=cash_action, cash_action_in=cash_action_in)
+    updated_cash_action = update_cash_action(
+        session=session, cash_action=cash_action, cash_action_in=cash_action_in
+    )
     return updated_cash_action
 
 
@@ -180,7 +184,7 @@ def delete_cash_action_endpoint(
     if cash_action.portfolio_id != portfolio_id:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Cash action not found in the specified portfolio"
+            detail="Cash action not found in the specified portfolio",
         )
 
     delete_cash_action(session=session, cash_action=cash_action)

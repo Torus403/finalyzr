@@ -7,7 +7,11 @@ from app.schemas.trades import TradeCreate, TradeUpdate
 
 
 def get_trade_by_id(session: Session, trade_id: UUID) -> Optional[Trade]:
-    return session.execute(select(Trade).where(Trade.id == str(trade_id))).scalars().first()
+    return (
+        session.execute(select(Trade).where(Trade.id == str(trade_id)))
+        .scalars()
+        .first()
+    )
 
 
 def get_trades_by_portfolio(

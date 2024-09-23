@@ -23,7 +23,9 @@ class ActionType(str, PyEnum):
 class Trade(Base):
     __tablename__ = "trades"
 
-    id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    id = Column(
+        CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True
+    )
     action = Column(Enum(ActionType, native_enum=False), nullable=False)
     execution_timestamp = Column(DateTime(timezone=True), nullable=False)
     ticker = Column(String(10), nullable=False)

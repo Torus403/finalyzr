@@ -28,7 +28,7 @@ def create_trade_endpoint(
     session: SessionDep,
     current_user: CurrentUser,
     portfolio_id: uuid.UUID = Path(...),
-    trade_in: TradeCreate
+    trade_in: TradeCreate,
 ):
     """
     Create a new trade within a portfolio.
@@ -105,7 +105,7 @@ def read_trade_by_id(
     if trade.portfolio_id != portfolio_id:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Trade not found in the specified portfolio"
+            detail="Trade not found in the specified portfolio",
         )
 
     return trade
@@ -142,7 +142,7 @@ def update_trade_endpoint(
     if trade.portfolio_id != portfolio_id:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Trade not found in the specified portfolio"
+            detail="Trade not found in the specified portfolio",
         )
 
     updated_trade = update_trade(session=session, trade=trade, trade_in=trade_in)
@@ -179,7 +179,7 @@ def delete_trade_endpoint(
     if trade.portfolio_id != portfolio_id:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Trade not found in the specified portfolio"
+            detail="Trade not found in the specified portfolio",
         )
 
     delete_trade(session=session, trade=trade)

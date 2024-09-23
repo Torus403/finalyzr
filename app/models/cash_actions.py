@@ -23,7 +23,9 @@ class CashActionType(str, PyEnum):
 class CashAction(Base):
     __tablename__ = "cash_actions"
 
-    id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    id = Column(
+        CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True
+    )
     action = Column(Enum(CashActionType, native_enum=False), nullable=False)
     amount = Column(Numeric(20, 10), nullable=False)
     execution_timestamp = Column(DateTime(timezone=True), nullable=False)
