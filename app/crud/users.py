@@ -60,6 +60,5 @@ def update(session: Session, current_user: User, new_user: dict) -> User:
 
 
 def delete_user(session: Session, user: User) -> None:
-    # TODO: implement deletion for related models like Portfolios, Trades... once these models are made.
     session.delete(user)
     session.commit()
