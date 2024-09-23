@@ -25,6 +25,7 @@ if config.config_file_name is not None:
 from app.core.db import Base
 from app.models.users import User
 from app.models.portfolios import Portfolio
+from app.models.trades import Trade
 
 target_metadata = Base.metadata
 
