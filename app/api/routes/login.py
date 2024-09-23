@@ -19,7 +19,7 @@ from app.utils.login import (
 router = APIRouter()
 
 
-@router.post("/login/")
+@router.post("/login")
 def login_access_token(
     session: SessionDep, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> Token:
