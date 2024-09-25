@@ -3,14 +3,15 @@ import uuid
 from fastapi import APIRouter, HTTPException, status
 
 import app.crud.portfolios as portfolio_crud
+import app.services.portfolios as portfolio_service
 from app.api.deps import SessionDep, CurrentUser
+from app.schemas.login import Message
 from app.schemas.portfolios import (
     PortfolioPublic,
     PortfoliosPublic,
     PortfolioCreate,
     PortfolioUpdate,
 )
-from app.schemas.login import Message
 
 router = APIRouter()
 
@@ -22,7 +23,7 @@ def create_portfolio(
     """
     Create a new portfolio.
     """
-    portfolio = portfolio_crud.create_portfolio(
+    portfolio = portfolio_service.create_portfolio(
         session=session, portfolio_in=portfolio_in, owner_id=current_user.id
     )
     return portfolio
@@ -40,7 +41,7 @@ def read_portfolios(
     portfolios = portfolio_crud.get_portfolios_by_owner_id(
         session=session, owner_id=current_user.id
     )
-    return PortfoliosPublic(data=portfolios)
+    return PortfoliosPublic(portfolios=portfolios)
 
 
 @router.get("/{portfolio_id}", response_model=PortfolioPublic)
@@ -93,8 +94,9 @@ def update_portfolio(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to update this portfolio",
         )
-    updated_portfolio = portfolio_crud.update_portfolio(
-        session=session, portfolio=portfolio, portfolio_in=portfolio_in
+
+    updated_portfolio = portfolio_service.update_portfolio(
+        session=session, current_portfolio=portfolio, new_portfolio=portfolio_in
     )
     return updated_portfolio
 
@@ -121,5 +123,6 @@ def delete_portfolio(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to delete this portfolio",
         )
+
     portfolio_crud.delete_portfolio(session=session, portfolio=portfolio)
     return Message(message="Portfolio deleted successfully")

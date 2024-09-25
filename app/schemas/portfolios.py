@@ -33,7 +33,7 @@ class PortfolioPublic(PortfolioInDBBase):
 
 
 class PortfoliosPublic(BaseModel):
-    data: List[PortfolioPublic]
+    portfolios: List[PortfolioPublic]
 
 
 class PortfolioInDB(PortfolioInDBBase):
