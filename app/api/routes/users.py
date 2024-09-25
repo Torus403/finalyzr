@@ -20,11 +20,12 @@ from app.schemas.users import (
     UserUpdate,
     UserUpdateMe,
 )
+import app.services.users as user_service
 
 router = APIRouter()
 
 
-@router.post("/signup", response_model=UserPublic)
+@router.post("/signup", response_model=UserPublic, status_code=status.HTTP_201_CREATED)
 def register_user(session: SessionDep, user_in: UserRegister) -> Any:
     """
     Register a new user.
@@ -37,7 +38,7 @@ def register_user(session: SessionDep, user_in: UserRegister) -> Any:
         )
 
     user_create = UserCreate(**user_in.model_dump())
-    new_user = user_crud.create_user(session=session, user_create=user_create)
+    new_user = user_service.create_user(session=session, user_create=user_create)
     return new_user
 
 
@@ -66,11 +67,10 @@ def update_password_me(
             detail="New password cannot be the same as the current one",
         )
 
-    hashed_password = hash_password(body.new_password)
-    user_crud.update_user_password(
+    user_service.update_user_password(
         session=session,
         user=current_user,
-        password=hashed_password,
+        password=body.new_password,
     )
     return Message(message="Password updated successfully")
 
@@ -92,9 +92,8 @@ def update_user_me(
                 detail="User with this email already exists",
             )
 
-    user_data = user_in.model_dump(exclude_unset=True)
-    updated_user = user_crud.update(
-        session=session, current_user=current_user, new_user=user_data
+    updated_user = user_service.update_user(
+        session=session, user=current_user, user_update=user_in
     )
     return updated_user
 

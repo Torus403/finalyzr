@@ -1,37 +1,39 @@
 import uuid
-from sqlalchemy import select, func, delete
+from typing import List, Optional
+
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 
 from app.models.users import User
-from app.schemas.users import UserCreate
-from app.core.security import hash_password
 
 
-def get_user_by_email(*, session: Session, email: str) -> User | None:
-    return session.execute(
-        select(User).filter(User.email == email)
-    ).scalar_one_or_none()
+def get_user_by_email(session: Session, email: str) -> Optional[User]:
+    """Retrieve a user by their email address."""
+    stmt = select(User).where(User.email == email)
+    return session.execute(stmt).scalar_one_or_none()
 
 
-def get_user_count(*, session: Session) -> int:
-    count_statement = select(func.count()).select_from(User)
-    return session.execute(count_statement).scalar_one()
-
-
-def get_users(*, session: Session, skip: int = 0, limit: int = 100) -> list[User]:
-    statement = select(User).offset(skip).limit(limit)
-    return list(session.execute(statement).scalars().all())
-
-
-def get_user_by_id(session: Session, user_id: uuid.UUID) -> User | None:
+def get_user_by_id(session: Session, user_id: uuid.UUID) -> Optional[User]:
+    """Retrieve a user by their unique ID."""
     return session.get(User, user_id)
 
 
-def create_user(*, session: Session, user_create: UserCreate) -> User:
-    user_data = user_create.model_dump(exclude={"password"})
-    hashed_password = hash_password(user_create.password)
-    user_data["password"] = hashed_password
+def get_users(session: Session, skip: int = 0, limit: int = 100) -> List[User]:
+    """Retrieve a list of users with pagination."""
+    stmt = select(User).offset(skip).limit(limit)
+    return list(session.execute(stmt).scalars().all())
 
+
+def get_user_count(session: Session) -> int:
+    """Get the total number of users."""
+    stmt = select(func.count()).select_from(User)
+    return session.execute(stmt).scalar_one()
+
+
+def create_user(session: Session, user_data: dict) -> User:
+    """
+    Create a new user in the database.
+    """
     user = User(**user_data)
     session.add(user)
     session.commit()
@@ -39,26 +41,21 @@ def create_user(*, session: Session, user_create: UserCreate) -> User:
     return user
 
 
-def update_user_password(session: Session, user: User, password: str) -> None:
+def update_user(session: Session, user: User, updates: dict) -> User:
     """
-    Update a user's password.
+    Update an existing user's information.
     """
-    user.password = password
+    for key, value in updates.items():
+        setattr(user, key, value)
     session.add(user)
     session.commit()
     session.refresh(user)
-
-
-def update(session: Session, current_user: User, new_user: dict) -> User:
-    for key, value in new_user.items():
-        setattr(current_user, key, value)
-
-    session.add(current_user)
-    session.commit()
-    session.refresh(current_user)
-    return current_user
+    return user
 
 
 def delete_user(session: Session, user: User) -> None:
+    """
+    Delete a user from the database.
+    """
     session.delete(user)
     session.commit()
