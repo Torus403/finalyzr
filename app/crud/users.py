@@ -15,7 +15,7 @@ def get_user_by_email(session: Session, email: str) -> Optional[User]:
 
 def get_user_by_id(session: Session, user_id: uuid.UUID) -> Optional[User]:
     """Retrieve a user by their unique ID."""
-    return session.get(User, user_id)
+    return session.get(User, str(user_id))
 
 
 def get_users(session: Session, skip: int = 0, limit: int = 100) -> List[User]:

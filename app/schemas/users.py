@@ -12,11 +12,11 @@ class UserCreate(UserBase):
     password: str
 
 
-class UserUpdate(UserBase):
-    password: Optional[str] = None
+# class UserUpdate(UserBase):
+#     password: Optional[str] = None
 
 
-class UserUpdateMe(BaseModel):
+class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
 
 
