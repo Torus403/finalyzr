@@ -7,7 +7,9 @@ from app.models.portfolios import Portfolio
 from app.schemas.portfolios import PortfolioCreate, PortfolioUpdate
 
 
-def create_portfolio(session: Session, portfolio_in: PortfolioCreate, owner_id: uuid.UUID) -> Portfolio:
+def create_portfolio(
+    session: Session, portfolio_in: PortfolioCreate, owner_id: uuid.UUID
+) -> Portfolio:
     """
     Create a new portfolio.
     """

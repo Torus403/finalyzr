@@ -7,7 +7,9 @@ from app.models.trades import Trade
 from app.schemas.trades import TradeCreate, TradeUpdate
 
 
-def create_trade(session: Session, trade_in: TradeCreate, portfolio_id: uuid.UUID) -> Trade:
+def create_trade(
+    session: Session, trade_in: TradeCreate, portfolio_id: uuid.UUID
+) -> Trade:
     """
     Create a new trade.
     """

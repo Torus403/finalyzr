@@ -40,7 +40,9 @@ def create_trade_endpoint(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to add trades to this portfolio",
         )
-    trade = trade_service.create_trade(session=session, trade_in=trade_in, portfolio_id=portfolio_id)
+    trade = trade_service.create_trade(
+        session=session, trade_in=trade_in, portfolio_id=portfolio_id
+    )
     return trade
 
 
@@ -142,7 +144,9 @@ def update_trade_endpoint(
             detail="Trade not found in the specified portfolio",
         )
 
-    updated_trade = trade_service.update_trade(session=session, current_trade=trade, new_trade=trade_in)
+    updated_trade = trade_service.update_trade(
+        session=session, current_trade=trade, new_trade=trade_in
+    )
     return updated_trade
 
 

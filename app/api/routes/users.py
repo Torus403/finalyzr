@@ -117,9 +117,7 @@ superuser_router = APIRouter(dependencies=[Depends(get_current_superuser)])
 
 
 @superuser_router.get("/{user_id}", response_model=UserPublic)
-def read_user_by_id(
-    user_id: uuid.UUID, session: SessionDep
-) -> Any:
+def read_user_by_id(user_id: uuid.UUID, session: SessionDep) -> Any:
     """
     Get a specific user by id.
     """
@@ -146,7 +144,9 @@ def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     return UsersPublic(data=users, count=user_count)
 
 
-@superuser_router.post("/", response_model=UserPublic, status_code=status.HTTP_201_CREATED)
+@superuser_router.post(
+    "/", response_model=UserPublic, status_code=status.HTTP_201_CREATED
+)
 def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
     """
     Create new user.
@@ -187,10 +187,13 @@ def update_user(
         )
         if existing_user and existing_user.id != user_id:
             raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT, detail="User with this email already exists"
+                status_code=status.HTTP_409_CONFLICT,
+                detail="User with this email already exists",
             )
 
-    updated_user = user_service.update_user(session=session, current_user=user, new_user=user_in)
+    updated_user = user_service.update_user(
+        session=session, current_user=user, new_user=user_in
+    )
     return updated_user
 
 
@@ -203,10 +206,13 @@ def delete_user(
     """
     user = user_crud.get_user_by_id(session=session, user_id=user_id)
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
     if user == current_user:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Super users are not allowed to delete themselves"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Super users are not allowed to delete themselves",
         )
 
     user_crud.delete_user(session=session, user=user)

@@ -20,7 +20,12 @@ def get_trades_by_portfolio(
     session: Session, portfolio_id: uuid.UUID, skip: int = 0, limit: int = 100
 ) -> List[Trade]:
     """Retrieve all trades from a portfolio with pagination."""
-    stmt = select(Trade).where(Trade.portfolio_id == str(portfolio_id)).offset(skip).limit(limit)
+    stmt = (
+        select(Trade)
+        .where(Trade.portfolio_id == str(portfolio_id))
+        .offset(skip)
+        .limit(limit)
+    )
     return list(session.execute(stmt).scalars().all())
 
 

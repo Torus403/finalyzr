@@ -57,7 +57,9 @@ def reset_password(session: SessionDep, body: NewPassword) -> Message:
         )
 
     hashed_password = hash_password(password=body.new_password)
-    user_service.update_user_password(session=session, user=user, password=hashed_password)
+    user_service.update_user_password(
+        session=session, user=user, password=hashed_password
+    )
 
     return Message(message="Password updated successfully")
 
