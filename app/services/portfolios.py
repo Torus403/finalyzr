@@ -9,7 +9,7 @@ from app.schemas.portfolios import PortfolioCreate, PortfolioUpdate
 
 def create_portfolio(session: Session, portfolio_in: PortfolioCreate, owner_id: uuid.UUID) -> Portfolio:
     """
-    Create a new user with hashed password.
+    Create a new portfolio.
     """
     portfolio_data = portfolio_in.model_dump()
     portfolio_data["owner_id"] = str(owner_id)

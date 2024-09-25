@@ -1,17 +1,14 @@
 import uuid
-from typing import List
+from typing import List, Any
 
 from fastapi import APIRouter, HTTPException, status, Path
 
 from app.api.deps import SessionDep, CurrentUser
 from app.crud.portfolios import get_portfolio_by_id
-from app.crud.trades import (
-    get_trade_by_id,
-    get_trades_by_portfolio,
-    create_trade,
-    update_trade,
-    delete_trade,
-)
+
+import app.crud.trades as trade_crud
+import app.services.trades as trade_service
+
 from app.schemas.login import Message
 from app.schemas.trades import Trade, TradeCreate, TradeUpdate
 
@@ -29,7 +26,7 @@ def create_trade_endpoint(
     current_user: CurrentUser,
     portfolio_id: uuid.UUID = Path(...),
     trade_in: TradeCreate,
-):
+) -> Any:
     """
     Create a new trade within a portfolio.
     """
@@ -43,7 +40,7 @@ def create_trade_endpoint(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to add trades to this portfolio",
         )
-    trade = create_trade(session=session, trade_in=trade_in, portfolio_id=portfolio_id)
+    trade = trade_service.create_trade(session=session, trade_in=trade_in, portfolio_id=portfolio_id)
     return trade
 
 
@@ -55,7 +52,7 @@ def read_trades_by_portfolio(
     portfolio_id: uuid.UUID = Path(...),
     skip: int = 0,
     limit: int = 100,
-):
+) -> Any:
     """
     Retrieve trades for a specific portfolio.
     """
@@ -69,7 +66,7 @@ def read_trades_by_portfolio(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to view trades of this portfolio",
         )
-    trades = get_trades_by_portfolio(
+    trades = trade_crud.get_trades_by_portfolio(
         session=session, portfolio_id=portfolio_id, skip=skip, limit=limit
     )
     return trades
@@ -97,7 +94,7 @@ def read_trade_by_id(
             detail="Not authorized to access this portfolio",
         )
 
-    trade = get_trade_by_id(session=session, trade_id=trade_id)
+    trade = trade_crud.get_trade_by_id(session=session, trade_id=trade_id)
     if not trade:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Trade not found"
@@ -119,7 +116,7 @@ def update_trade_endpoint(
     portfolio_id: uuid.UUID = Path(...),
     trade_id: uuid.UUID,
     trade_in: TradeUpdate,
-):
+) -> Any:
     """
     Update an existing trade within a specific portfolio.
     """
@@ -134,7 +131,7 @@ def update_trade_endpoint(
             detail="Not authorized to access this portfolio",
         )
 
-    trade = get_trade_by_id(session=session, trade_id=trade_id)
+    trade = trade_crud.get_trade_by_id(session=session, trade_id=trade_id)
     if not trade:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Trade not found"
@@ -145,18 +142,18 @@ def update_trade_endpoint(
             detail="Trade not found in the specified portfolio",
         )
 
-    updated_trade = update_trade(session=session, trade=trade, trade_in=trade_in)
+    updated_trade = trade_service.update_trade(session=session, current_trade=trade, new_trade=trade_in)
     return updated_trade
 
 
-@router.delete("/{trade_id}", response_model=dict)
+@router.delete("/{trade_id}", response_model=Message)
 def delete_trade_endpoint(
     *,
     session: SessionDep,
     current_user: CurrentUser,
     portfolio_id: uuid.UUID = Path(...),
     trade_id: uuid.UUID,
-):
+) -> Any:
     """
     Delete a trade within a specific portfolio.
     """
@@ -171,7 +168,7 @@ def delete_trade_endpoint(
             detail="Not authorized to access this portfolio",
         )
 
-    trade = get_trade_by_id(session=session, trade_id=trade_id)
+    trade = trade_crud.get_trade_by_id(session=session, trade_id=trade_id)
     if not trade:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Trade not found"
@@ -182,5 +179,5 @@ def delete_trade_endpoint(
             detail="Trade not found in the specified portfolio",
         )
 
-    delete_trade(session=session, trade=trade)
+    trade_crud.delete_trade(session=session, trade=trade)
     return Message(message="Trade deleted successfully")
