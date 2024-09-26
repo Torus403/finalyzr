@@ -190,9 +190,11 @@ def create_trade_fixture(db: Session, create_portfolio_fixture):
 
     return _create_trade
 
+
 @pytest.fixture
 def create_cash_action_fixture(db: Session, create_portfolio_fixture):
     """Fixture to create a cash action for testing with customizable parameters."""
+
     def _create_cash_action(
         portfolio_id: str = None,
         action: CashActionType = CashActionType.DEPOSIT,

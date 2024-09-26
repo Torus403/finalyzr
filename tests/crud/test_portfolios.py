@@ -73,9 +73,7 @@ def test_update_portfolio_success(db: Session, create_portfolio_fixture):
 def test_update_portfolio_partial(db: Session, create_portfolio_fixture):
     portfolio = create_portfolio_fixture()
     original_name = portfolio.name
-    updates = {
-        "description": "Updated Description"
-    }
+    updates = {"description": "Updated Description"}
     updated_portfolio = update_portfolio(
         session=db, portfolio=portfolio, updates=updates
     )

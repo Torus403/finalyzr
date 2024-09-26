@@ -47,10 +47,14 @@ def test_get_trade_by_id_not_exists(db: Session):
     assert fetched_trade is None
 
 
-def test_get_trades_by_portfolio(db: Session, create_portfolio_fixture, create_trade_fixture):
+def test_get_trades_by_portfolio(
+    db: Session, create_portfolio_fixture, create_trade_fixture
+):
     portfolio = create_portfolio_fixture()
     trades = [create_trade_fixture(portfolio_id=str(portfolio.id)) for _ in range(3)]
-    fetched_trades = get_trades_by_portfolio(session=db, portfolio_id=uuid.UUID(portfolio.id))
+    fetched_trades = get_trades_by_portfolio(
+        session=db, portfolio_id=uuid.UUID(portfolio.id)
+    )
     assert len(fetched_trades) == 3
     fetched_ids = {trade.id for trade in fetched_trades}
     expected_ids = {trade.id for trade in trades}
