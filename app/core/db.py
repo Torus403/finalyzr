@@ -12,6 +12,9 @@ Base = mapper_registry.generate_base()
 
 def setup_database():
     from app.models.users import User
+    from app.models.portfolios import Portfolio
+    from app.models.trades import Trade
+    from app.models.cash_actions import CashAction
 
     Base.metadata.create_all(bind=engine)
     mapper_registry.configure()
