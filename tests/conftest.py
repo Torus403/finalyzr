@@ -14,6 +14,7 @@ import app.crud.users as user_crud
 import app.crud.portfolios as portfolio_crud
 from app.api.deps import get_db
 from app.core.db import Base
+from app.core.security import hash_password
 
 # Need to import models to ensure they are registered on the metadata
 from app.models.users import User
@@ -103,7 +104,8 @@ def create_user_fixture(db: Session):
     def _create_user(email: str = None, password: str = None) -> User:
         email = email or generate_random_email()
         password = password or generate_random_password()
-        user_data = UserCreate(email=email, password=password).model_dump()
+        hashed_password = hash_password(password)
+        user_data = UserCreate(email=email, password=hashed_password).model_dump()
         return user_crud.create_user(session=db, user_data=user_data)
 
     return _create_user
