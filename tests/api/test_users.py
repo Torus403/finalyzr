@@ -161,7 +161,9 @@ def test_read_user_by_id_success(client: TestClient, create_user_fixture):
     user = create_user_fixture()
     headers = authenticate_user(client, superuser)
 
-    response = client.get(f"{settings.API_V1_STR}/admin/users/{user.id}", headers=headers)
+    response = client.get(
+        f"{settings.API_V1_STR}/admin/users/{user.id}", headers=headers
+    )
 
     assert response.status_code == 200
     json_response = response.json()
@@ -213,7 +215,9 @@ def test_superuser_update_user_success(client: TestClient, create_user_fixture):
     }
 
     response = client.patch(
-        f"{settings.API_V1_STR}/admin/users/{user.id}", json=update_data, headers=headers
+        f"{settings.API_V1_STR}/admin/users/{user.id}",
+        json=update_data,
+        headers=headers,
     )
 
     assert response.status_code == 200
@@ -226,7 +230,9 @@ def test_superuser_delete_user_success(client: TestClient, create_user_fixture):
     user = create_user_fixture()
     headers = authenticate_user(client, superuser)
 
-    response = client.delete(f"{settings.API_V1_STR}/admin/users/{user.id}", headers=headers)
+    response = client.delete(
+        f"{settings.API_V1_STR}/admin/users/{user.id}", headers=headers
+    )
 
     assert response.status_code == 200
     assert response.json()["message"] == "User deleted successfully"
