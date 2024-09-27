@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 from typing import List, Optional
 
 from sqlalchemy import select, and_
@@ -77,6 +78,24 @@ def get_buy_trades(session: Session, portfolio_id: uuid.UUID) -> List[Trade]:
             and_(
                 Trade.portfolio_id == str(portfolio_id),
                 Trade.action == ActionType.BUY,
+            )
+        )
+        .order_by(Trade.execution_timestamp)
+        .all()
+    )
+
+
+def get_trades_within_period(
+    session: Session, portfolio_id: uuid.UUID, start_date: datetime, end_date: datetime
+) -> List[Trade]:
+    """Retrieve all trades for the given portfolio within the specified date range."""
+    return list(
+        session.query(Trade)
+        .filter(
+            and_(
+                Trade.portfolio_id == str(portfolio_id),
+                Trade.execution_timestamp >= start_date,
+                Trade.execution_timestamp <= end_date,
             )
         )
         .order_by(Trade.execution_timestamp)

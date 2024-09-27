@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.routes import login, users, portfolios, trades, cash_actions
-from app.api.routes.metrics import overview, positions
+from app.api.routes.metrics import overview, positions, statistics
 
 api_router = APIRouter()
 
@@ -25,6 +25,11 @@ api_router.include_router(
 api_router.include_router(
     positions.router,
     prefix="/portfolios/{portfolio_id}/metrics/positions",
+    tags=["metrics"],
+)
+api_router.include_router(
+    statistics.router,
+    prefix="/portfolios/{portfolio_id}/metrics/statistics",
     tags=["metrics"],
 )
 
