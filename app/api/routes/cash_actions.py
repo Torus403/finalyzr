@@ -101,7 +101,7 @@ def read_cash_action_by_id(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Cash action not found"
         )
-    if cash_action.portfolio_id != portfolio_id:
+    if cash_action.portfolio_id != str(portfolio_id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Cash action not found in the specified portfolio",
@@ -140,7 +140,7 @@ def update_cash_action_endpoint(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Cash action not found"
         )
-    if cash_action.portfolio_id != portfolio_id:
+    if cash_action.portfolio_id != str(portfolio_id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Cash action not found in the specified portfolio",
@@ -181,7 +181,7 @@ def delete_cash_action_endpoint(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Cash action not found"
         )
-    if cash_action.portfolio_id != portfolio_id:
+    if cash_action.portfolio_id != str(portfolio_id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Cash action not found in the specified portfolio",
