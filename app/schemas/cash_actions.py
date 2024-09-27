@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field, condecimal
 
 class ActionType(str, Enum):
     DEPOSIT = "deposit"
-    WITHDRAW = "withdraw"
+    WITHDRAWAL = "withdrawal"
 
 
 class CashActionBase(BaseModel):
