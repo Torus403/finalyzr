@@ -1,10 +1,10 @@
 import uuid
 from typing import List, Optional
 
-from sqlalchemy import select
+from sqlalchemy import select, and_
 from sqlalchemy.orm import Session
 
-from app.models.trades import Trade
+from app.models.trades import Trade, ActionType
 
 
 def get_trade_by_id(session: Session, trade_id: uuid.UUID) -> Optional[Trade]:
@@ -52,3 +52,33 @@ def delete_trade(session: Session, trade: Trade) -> None:
     """Delete a trade from the database."""
     session.delete(trade)
     session.commit()
+
+
+def get_sell_trades(session: Session, portfolio_id: uuid.UUID) -> List[Trade]:
+    """Retrieve all sell trades for the given portfolio."""
+    return list(
+        session.query(Trade)
+        .filter(
+            and_(
+                Trade.portfolio_id == str(portfolio_id),
+                Trade.action == ActionType.SELL,
+            )
+        )
+        .order_by(Trade.execution_timestamp)
+        .all()
+    )
+
+
+def get_buy_trades(session: Session, portfolio_id: uuid.UUID) -> List[Trade]:
+    """Retrieve all buy trades for the given portfolio."""
+    return list(
+        session.query(Trade)
+        .filter(
+            and_(
+                Trade.portfolio_id == str(portfolio_id),
+                Trade.action == ActionType.BUY,
+            )
+        )
+        .order_by(Trade.execution_timestamp)
+        .all()
+    )

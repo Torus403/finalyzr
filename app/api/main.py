@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.routes import login, users, portfolios, trades, cash_actions
+from app.api.routes.metrics import overview, positions
 
 api_router = APIRouter()
 
@@ -15,6 +16,16 @@ api_router.include_router(
     cash_actions.router,
     prefix="/portfolios/{portfolio_id}/cash_actions",
     tags=["cash actions"],
+)
+api_router.include_router(
+    overview.router,
+    prefix="/portfolios/{portfolio_id}/metrics/overview",
+    tags=["metrics"],
+)
+api_router.include_router(
+    positions.router,
+    prefix="/portfolios/{portfolio_id}/metrics/positions",
+    tags=["metrics"],
 )
 
 # Superuser routes
