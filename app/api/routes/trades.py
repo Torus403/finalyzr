@@ -101,7 +101,7 @@ def read_trade_by_id(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Trade not found"
         )
-    if trade.portfolio_id != portfolio_id:
+    if trade.portfolio_id != str(portfolio_id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Trade not found in the specified portfolio",
@@ -138,7 +138,7 @@ def update_trade_endpoint(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Trade not found"
         )
-    if trade.portfolio_id != portfolio_id:
+    if trade.portfolio_id != str(portfolio_id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Trade not found in the specified portfolio",
@@ -177,7 +177,7 @@ def delete_trade_endpoint(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Trade not found"
         )
-    if trade.portfolio_id != portfolio_id:
+    if trade.portfolio_id != str(portfolio_id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Trade not found in the specified portfolio",
