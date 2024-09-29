@@ -40,12 +40,10 @@ class LoggingSettings(BaseSettings):
                 "format": self.LOG_FORMAT,
                 "datefmt": "%Y-%m-%d %H:%M:%S",
             },
-
             "detailed": {
                 "format": "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
                 "datefmt": "%Y-%m-%d %H:%M:%S",
             },
-
             "json": {
                 "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
                 "format": "%(asctime)s %(levelname)s %(name)s %(message)s",
@@ -58,7 +56,6 @@ class LoggingSettings(BaseSettings):
                 "level": self.LOG_LEVEL,
                 "propagate": False,
             },
-
             # The bcrypt library has a known issue (https://github.com/pyca/bcrypt/issues/684)
             # with passlib import warning. Use this to suppress it in the logs and only show error-level.
             "passlib": {
