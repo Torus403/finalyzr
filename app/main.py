@@ -1,8 +1,13 @@
 from fastapi import FastAPI
-from fastapi.routing import APIRoute
 
 from app.api.main import api_router
 from app.core.config import settings
+from app.core.log_config import logging_settings
+
+# This needs to be called before middleware is imported to ensure setup
+logging_settings.setup()
+
+from app.core.middleware import log_requests, add_request_id
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -10,6 +15,9 @@ app = FastAPI(
     "interact with the Finalyzr API.",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
+
+app.middleware("http")(log_requests)
+app.middleware("http")(add_request_id)
 
 
 @app.get("/")
