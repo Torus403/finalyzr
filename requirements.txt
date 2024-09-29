@@ -5,7 +5,7 @@ pydantic-settings
 fastapi~=0.115.0
 pymysql
 mysqlclient
-python-dotenv
+python-dotenv~=1.0.1
 uvicorn
 python-jwt
 PyJWT~=2.9.0
@@ -13,8 +13,8 @@ python-jose[cryptography]
 passlib[bcrypt]~=1.7.4
 python-multipart
 bcrypt
-yfinance
-pytest
+yfinance~=0.2.43
+pytest~=8.3.3
 pytest-asyncio
 httpx
 
@@ -26,4 +26,6 @@ pandas
 numpy
 pytest-dotenv
 pytest-mock
-python-dateutil
+python-dateutil~=2.9.0.post0
+contextvars
+python-json-logger
